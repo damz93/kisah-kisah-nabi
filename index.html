@@ -101,27 +101,32 @@
 
         function renderList(filter = "") {
             nabiList.innerHTML = "";
-            nabiData.filter(nabi => nabi.nama.toLowerCase().includes(filter.toLowerCase()))
-                .forEach((nabi, index) => {
+            nabiData
+                .filter(nabi => nabi.nama.toLowerCase().includes(filter.toLowerCase()))
+                .forEach(nabi => {
                     const li = document.createElement("li");
                     li.className = "list-group-item list-group-item-action";
                     li.textContent = nabi.nama;
-                    li.dataset.index = index;
+                    li.dataset.nama = nabi.nama; // Gunakan nama sebagai identifier unik
                     li.addEventListener("click", showDetail);
                     nabiList.appendChild(li);
                 });
         }
 
         function showDetail(event) {
-            const index = event.target.dataset.index;
-            const nabi = nabiData[index];
-            document.getElementById("modalTitle").textContent = nabi.nama;
-            document.getElementById("modalCerita").textContent = nabi.cerita;
-            document.getElementById("modalMukjizat").textContent = nabi.mukjizat;
-            new bootstrap.Modal(document.getElementById("detailModal")).show();
+            const namaNabi = event.target.dataset.nama;
+            const nabi = nabiData.find(n => n.nama === namaNabi); // Cari berdasarkan nama
+
+            if (nabi) {
+                document.getElementById("modalTitle").textContent = nabi.nama;
+                document.getElementById("modalCerita").textContent = nabi.cerita;
+                document.getElementById("modalMukjizat").textContent = nabi.mukjizat;
+                new bootstrap.Modal(document.getElementById("detailModal")).show();
+            }
         }
 
         searchInput.addEventListener("input", () => renderList(searchInput.value));
+
     </script>
         <footer class="text-center text-white" style="
 			background-color: #1b5e20;
